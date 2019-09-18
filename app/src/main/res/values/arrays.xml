@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="display_names">
+        <item>Megan Fox</item>
+        <item>Olivia Wilde</item>
+        <item>Jennifer Lawrence</item>
+        <item>Jessica Alba</item>
+        <item>Leighton Meester</item>
+        <item>Hayden Panettiere</item>
+        <item>Ashley Tisdale</item>
+        <item>Aida Yespica</item>
+        <item>Adriana Lima</item>
+        <item>Alessandra Ambrosio</item>
+        <item>Candice Swanepoel</item>
+        <item>Jessica Gomes</item>
+        <item>Genevieve Morton</item>
+        <item>Petra Nemcova</item>
+        <item>Lily Aldridge</item>
+        <item>Kate Upton</item>
+        <item>Gigi Hadid</item>
+        <item>Michelle Keegan</item>
+        <item>Katherine Webb</item>
+        <item>Scarlett Johansson</item>
+        <item>Katharine McPhee</item>
+        <item>Lucy Pinder</item>
+        <item>Miranda Kerr</item>
+    </array>
+
+    <array name="usernames">
+        <item>\@meganfox</item>
+        <item>\@oliviawilde</item>
+        <item>\@Jennifer_Lawrence</item>
+        <item>\@jessicaalba</item>
+        <item>\@itsmeleighton</item>
+        <item>\@haydenpanettier</item>
+        <item>\@ashleytisdale</item>
+        <item>\@AidaYespica</item>
+        <item>\@AdrianaLima</item>
+        <item>\@AngelAlessandra</item>
+        <item>\@angelcandice</item>
+        <item>\@iamjessicagomes</item>
+        <item>\@genevievemorton</item>
+        <item>\@pnemcova</item>
+        <item>\@LilyAldridge</item>
+        <item>\@KateUpton</item>
+        <item>\@GiGiHadid</item>
+        <item>\@michkeegan</item>
+        <item>\@_KatherineWebb</item>
+        <item>\@ScarlettJ</item>
+        <item>\@katharinemcphee</item>
+        <item>\@LucyPinder</item>
+        <item>\@MirandaKerr</item>
+    </array>
+
+    <array name="avatar_urls">
+        <item>https://s.hdnux.com/photos/51/23/24/10827008/3/920x920.jpg</item>
+        <item>https://imgix.ranker.com/node_img/28/540336/original/barack-obama-writers-photo-1?w=650&amp;q=50&amp;=pjpg&amp;fit=crop&amp;crop=faces</item>
+        <item>https://i1.wp.com/bestlifeonline.com/wp-content/uploads/2018/08/liam-neeson.jpg?fit=500%2C333&amp;ssl=1</item>
+        <item>https://usercontent2.hubstatic.com/7713275.jpg</item>
+        <item>https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxKS3O1oxxK1OgUWb_MDOgP8LMu7uzJwybQr4ru5p2vesIH-SFGw</item>
+        <item>https://s.hdnux.com/photos/51/23/24/10827008/3/920x920.jpg</item>
+        <item>https://s-media-cache-ak0.pinimg.com/originals/0b/b3/70/0bb3704734e0a535ec846772f7d28be7.jpg</item>
+        <item>http://www.eventienonsolo.it/wp-content/uploads/2012/05/Aida_Yespica.jpg</item>
+        <item>http://i1.top.de/024/201024,pd_1/adriana-lima.jpg</item>
+        <item>http://cdn-img.instyle.com/sites/default/files/styles/684xflex/public/images/2015/10/102815-alessandra-ambrosio-lead.jpg?itok=uRVvt-Ne</item>
+        <item>https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BBR9VUw.img?h=416&amp;w=624&amp;m=6&amp;q=60&amp;u=t&amp;o=f&amp;l=f&amp;x=2232&amp;y=979</item>
+        <item>https://cbsnews2.cbsistatic.com/hub/i/r/2016/03/30/4c6b6e51-76ad-46d3-b03c-ced90add8ec7/resize/620x465g2/7cf0264a6cc3d4c16b2950c61c79f58b/rtx2735j.jpg</item>
+        <item>https://img-aws.ehowcdn.com/700x/cdn.onlyinyourstate.com/wp-content/uploads/2016/07/3630750300_f1cd14cdc3_b-700x875.jpg</item>
+        <item>https://img1.nickiswift.com/img/gallery/rich-and-famous-people-who-were-once-homeless/intro-1547592193.jpg</item>
+        <item>https://www.shortlist.com/media/images/2019/05/40-favourite-songs-of-famous-people-28-1556672663-9rFo-column-width-inline.jpg</item>
+        <item>https://dz9yg0snnohlc.cloudfront.net/new-what-famous-people-with-depression-have-said-about-the-condition-1.jpg</item>
+        <item>https://www.thefamouspeople.com/profiles/thumbs/eminem-4.jpg</item>
+        <item>https://allthatsinteresting.com/wordpress/wp-content/uploads/2018/08/dan-aykroyd.jpg</item>
+        <item>https://assets.rebelcircus.com/blog/wp-content/uploads/2014/12/justin-bieber.jpg</item>
+        <item>https://imgix.ranker.com/node_img/72/1433037/original/leonardo-dicaprio-writers-photo-1?w=650&amp;q=50&amp;fm=pjpg&amp;fit=crop&amp;crop=faces</item>
+        <item>https://i.ytimg.com/vi/oZKmmzp5q_U/maxresdefault.jpg</item>
+        <item>https://piximus.net/media2/52633/real-names-of-famous-people-1.jpg</item>
+        <item>https://www.sbs.com.au/topics/sites/sbs.com.au.topics/files/styles/full/public/gettyimages-472015658.jpg?itok=koGV2t2m&amp;mtime=1495787400</item>
+    </array>
+</resources>
