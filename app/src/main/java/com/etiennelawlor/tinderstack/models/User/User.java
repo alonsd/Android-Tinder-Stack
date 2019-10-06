@@ -1,23 +1,31 @@
 package com.etiennelawlor.tinderstack.models;
 
-/**
- * Created by etiennelawlor on 11/17/16.
- */
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "user_table")
 public class User {
 
-    // region Member Variables
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private String avatarUrl;
     private String displayName;
     private String username;
-    // endregion
 
-    // region Constructors
+    @Ignore
     public User(){
 
     }
-    // endregion
 
-    // region Getters
+    public User(String avatarUrl, String displayName, String username) {
+        this.avatarUrl = avatarUrl;
+        this.displayName = displayName;
+        this.username = username;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -29,9 +37,7 @@ public class User {
     public String getUsername() {
         return username;
     }
-    // endregion
 
-    // region Setters
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
@@ -43,6 +49,12 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-    // endregion
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
