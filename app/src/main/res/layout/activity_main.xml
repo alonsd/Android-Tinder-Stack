@@ -1,24 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/grey_200"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_200"
         android:gravity="center_vertical"
-        android:background="@color/grey_200">
+        android:orientation="vertical"
+        tools:layout_height="500dp">
 
         <com.etiennelawlor.tinderstack.ui.TinderStackLayout
-            android:id="@+id/tinder_stack_layout"
+            android:id="@+id/activity_main_tinder_stack_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/activity_main_delete_button"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:text="@string/activity_main_delete" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_main_pass_button"
+            android:layout_margin="10dp"
+            android:background="#A9A9A9"
+            android:text="@string/activity_main_pass" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/activity_main_approve_button"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#98FB98"
+            android:text="@string/activity_main_approve" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

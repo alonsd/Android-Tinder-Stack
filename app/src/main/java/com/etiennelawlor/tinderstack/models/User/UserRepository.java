@@ -1,4 +1,4 @@
-package com.etiennelawlor.tinderstack.models;
+package com.etiennelawlor.tinderstack.models.User;
 
 import android.app.Application;
 import android.os.AsyncTask;

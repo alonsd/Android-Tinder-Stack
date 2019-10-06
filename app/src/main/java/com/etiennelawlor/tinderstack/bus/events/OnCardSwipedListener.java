@@ -1,6 +1,6 @@
 package com.etiennelawlor.tinderstack.bus.events;
 
-public interface Completion {
+public interface OnCardSwipedListener {
 
   void send(Object object);
   void onNext(Integer integer);

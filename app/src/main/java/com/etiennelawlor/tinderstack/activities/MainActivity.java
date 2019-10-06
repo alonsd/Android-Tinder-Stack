@@ -1,46 +1,61 @@
 package com.etiennelawlor.tinderstack.activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.etiennelawlor.tinderstack.R;
-import com.etiennelawlor.tinderstack.bus.events.Completion;
-import com.etiennelawlor.tinderstack.models.User;
+import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
+import com.etiennelawlor.tinderstack.models.User.User;
+import com.etiennelawlor.tinderstack.models.ViewModel.UserViewModel;
 import com.etiennelawlor.tinderstack.ui.TinderCardView;
 import com.etiennelawlor.tinderstack.ui.TinderStackLayout;
+import java.util.ArrayList;
+import butterknife.BindView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-  // region Constants
   private static final int STACK_SIZE = 2;
-  // endregion
 
-  // region Views
   private TinderStackLayout tinderStackLayout;
-  // endregion
-
-  // region Member Variables
-  private String[] displayNamesList, userNameList, avatarUrlList;
+  private OnCardSwipedListener listener;
+  private UserViewModel userViewModel;
+  private ArrayList<User> usersList;
   private int index = 1;
-  // endregion
 
-  // region Listeners
-  private Completion completion;
+  @BindView(R.id.activity_main_delete_button)
+  Button mDeleteButton;
 
-  // endregion
+  @BindView(R.id.activity_main_pass_button)
+  Button mPassButton;
+
+  @BindView(R.id.activity_main_approve_button)
+  Button mApproveButton;
+
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    displayNamesList = getResources().getStringArray(R.array.display_names);
-    userNameList = getResources().getStringArray(R.array.usernames);
-    avatarUrlList = getResources().getStringArray(R.array.avatar_urls);
+    observeLiveData();
 
-    tinderStackLayout = findViewById(R.id.tinder_stack_layout);
+    initViewsAndListeners();
+  }
 
-    completion = new Completion() {
+  private void initViewsAndListeners() {
+    tinderStackLayout = findViewById(R.id.activity_main_tinder_stack_layout);
+    mDeleteButton = findViewById(R.id.activity_main_delete_button);
+    mPassButton = findViewById(R.id.activity_main_pass_button);
+    mApproveButton = findViewById(R.id.activity_main_approve_button);
+    mDeleteButton.setOnClickListener(this);
+    mApproveButton.setOnClickListener(this);
+    mPassButton.setOnClickListener(this);
+    listener = new OnCardSwipedListener() {
       @Override
       public void send(Object object) {
 
@@ -51,35 +66,53 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (integer == 1) {
-            addCards(1);
+          addCards(1);
         }
 
       }
     };
-    addCards(-1);
+  }
+
+  private void observeLiveData() {
+    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+    userViewModel.getAllUsers().observe(this, users -> {
+      //update a new list of users
+      usersList = (ArrayList) users;
+      addCards(-1);
+    });
   }
 
   private void addCards(int stackSizeToAdd) {
     TinderCardView tinderCardView;
     for (int i = index; index < i + (STACK_SIZE + stackSizeToAdd); index++) {
-      if (index >= displayNamesList.length || index >= userNameList.length || index >= avatarUrlList.length){
+      if (index >= usersList.size()) {
         index = 0;
         i = 0;
         addCards(-1);
       }
-      tinderCardView = new TinderCardView(this, completion);
-      tinderCardView.bind(getUser(index));
+      tinderCardView = new TinderCardView(this, listener);
+      tinderCardView.bind(usersList.get(index));
       tinderStackLayout.addCard(tinderCardView);
     }
   }
 
-  // region Helper Methods
-  private User getUser(int index) {
-    User user = new User();
-    user.setAvatarUrl(avatarUrlList[index]);
-    user.setDisplayName(displayNamesList[index]);
-    user.setUsername(userNameList[index]);
-    return user;
+  @Override
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.activity_main_approve_button:
+        //show alert dialog - open a dialog with contact information but do nothing with the stack
+
+        break;
+      case R.id.activity_main_pass_button:
+        //next card should appear - this is not a neutral button
+
+        break;
+      case R.id.activity_main_delete_button:
+        //next card should appear - this is a 'dislike' button
+        TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
+        topCardOnStack.deleteCurrentTopCard();
+        break;
+
+    }
   }
-  // endregion
 }

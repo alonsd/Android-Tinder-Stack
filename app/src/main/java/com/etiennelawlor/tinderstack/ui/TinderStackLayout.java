@@ -7,24 +7,26 @@ import android.view.ViewGroup;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
 
-import com.etiennelawlor.tinderstack.bus.events.Completion;
+import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
 import com.etiennelawlor.tinderstack.utilities.DisplayUtility;
 
-/**
- * Created by etiennelawlor on 11/18/16.
- */
 
 public class TinderStackLayout extends FrameLayout {
 
-  // region Constants
+  // Constants
   private static final int DURATION = 300;
-  // endregion
-  private Completion completion;
+
+  // Variable members
+  private OnCardSwipedListener onCardSwipedListener;
   private int screenWidth;
   private int yMultiplier;
-  // endregion
 
-  // region Constructors
+  //Top card
+  private TinderCardView topCardOnStack;
+
+
+
+  //Constructors
   public TinderStackLayout(Context context) {
     super(context);
     init();
@@ -39,20 +41,19 @@ public class TinderStackLayout extends FrameLayout {
     super(context, attrs, defStyle);
     init();
   }
-  // endregion
 
   @Override
   public void addView(View child, int index, ViewGroup.LayoutParams params) {
     super.addView(child, index, params);
-    if (completion != null)
-      completion.onNext(getChildCount());
+    if (onCardSwipedListener != null)
+      onCardSwipedListener.onNext(getChildCount());
   }
 
   @Override
   public void removeView(View view) {
     super.removeView(view);
-    if (completion != null)
-      completion.onNext(getChildCount());
+    if (onCardSwipedListener != null)
+      onCardSwipedListener.onNext(getChildCount());
   }
 
   @Override
@@ -60,20 +61,20 @@ public class TinderStackLayout extends FrameLayout {
     super.onDetachedFromWindow();
   }
 
-  // region Helper Methods
+  // Helper Methods
   private void init() {
     setClipChildren(false);
 
     screenWidth = DisplayUtility.getScreenWidth(getContext());
     yMultiplier = DisplayUtility.dp2px(getContext(), 8);
 
-    //completion = setupCompletion();
-
   }
 
   public void addCard(TinderCardView tinderCardView) {
-    if (completion == null)
-      completion = tinderCardView.getCompletion();
+    if (onCardSwipedListener == null)
+      onCardSwipedListener = tinderCardView.getOnCardSwipedListener();
+
+    topCardOnStack = tinderCardView;
 
     ViewGroup.LayoutParams layoutParams;
     layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -90,5 +91,8 @@ public class TinderStackLayout extends FrameLayout {
         .setInterpolator(new AnticipateOvershootInterpolator())
         .setDuration(DURATION);
   }
-  // endregion
+
+  public TinderCardView getTopCardOnStack() {
+    return topCardOnStack;
+  }
 }

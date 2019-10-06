@@ -1,4 +1,4 @@
-package com.etiennelawlor.tinderstack.models;
+package com.etiennelawlor.tinderstack.models.User;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

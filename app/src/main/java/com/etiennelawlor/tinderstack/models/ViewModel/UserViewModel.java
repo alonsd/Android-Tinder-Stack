@@ -1,4 +1,4 @@
-package com.etiennelawlor.tinderstack;
+package com.etiennelawlor.tinderstack.models.ViewModel;
 
 import android.app.Application;
 
@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.etiennelawlor.tinderstack.models.User;
-import com.etiennelawlor.tinderstack.models.UserRepository;
+import com.etiennelawlor.tinderstack.models.User.User;
+import com.etiennelawlor.tinderstack.models.User.UserRepository;
 
 import java.util.List;
 
