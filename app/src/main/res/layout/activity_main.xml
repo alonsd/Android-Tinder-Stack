@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#ff0000"
+            android:tag="1"
             android:text="@string/activity_main_delete" />
 
         <Button
@@ -44,6 +45,7 @@
             android:id="@+id/activity_main_pass_button"
             android:layout_margin="10dp"
             android:background="#A9A9A9"
+            android:tag="2"
             android:text="@string/activity_main_pass" />
 
         <Button
@@ -52,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#98FB98"
+            android:tag="3"
             android:text="@string/activity_main_approve" />
 
     </LinearLayout>

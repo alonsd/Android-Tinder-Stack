@@ -7,6 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+
 import com.etiennelawlor.tinderstack.R;
 import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
 import com.etiennelawlor.tinderstack.models.User.User;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   @Override
   public void onClick(View view) {
+    TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
     switch (view.getId()) {
       case R.id.activity_main_approve_button:
         //show alert dialog - open a dialog with contact information but do nothing with the stack
@@ -105,12 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         break;
       case R.id.activity_main_pass_button:
         //next card should appear - this is not a neutral button
-
+        topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
         break;
       case R.id.activity_main_delete_button:
         //next card should appear - this is a 'dislike' button
-        TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
-        topCardOnStack.deleteCurrentTopCard();
+        topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
         break;
 
     }

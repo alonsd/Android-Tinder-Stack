@@ -3,4 +3,6 @@
     <string name="activity_main_delete">Delete</string>
     <string name="activity_main_pass">Pass</string>
     <string name="activity_main_approve">Approve</string>
+    <string name="tinder_card_pass">Pass</string>
+    <string name="tinder_card_delete">Delete</string>
 </resources>

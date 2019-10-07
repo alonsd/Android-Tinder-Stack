@@ -125,12 +125,25 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     return super.onTouchEvent(motionEvent);
   }
 
-  public void deleteCurrentTopCard() {
+  public void handleButtonPressed(int choosenButton) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
 
-    updateAlphaOfBadges(topCard.getX());
-    dismissCard(topCard, -(screenWidth * 2));
+    switch (choosenButton){
+      case 1: //delete button
+        updateAlphaOfBadges(topCard.getX());
+        dismissCard(topCard, -(screenWidth * 2));
+        break;
+      case 2: //pass button
+        updateAlphaOfBadges(topCard.getX());
+        dismissCard(topCard, (screenWidth * 2));
+        break;
+
+      case 3: // approve button
+
+        break;
+    }
+
   }
 
 
