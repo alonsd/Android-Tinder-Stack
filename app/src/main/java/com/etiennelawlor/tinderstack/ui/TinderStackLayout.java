@@ -84,7 +84,7 @@ public class TinderStackLayout extends FrameLayout {
 
     tinderCardView.animate()
         .x(0)
-        .scaleX(scaleValue)
+        //.scaleX(scaleValue)
         .setInterpolator(new AnticipateOvershootInterpolator())
         .setDuration(DURATION);
   }

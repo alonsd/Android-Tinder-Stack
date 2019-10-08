@@ -13,6 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <com.etiennelawlor.tinderstack.ui.TinderStackLayout
         android:id="@+id/activity_main_tinder_stack_layout"
         android:layout_width="match_parent"
@@ -20,11 +21,13 @@
         android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
-
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:layout_constraintVertical_bias="0.0"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -33,6 +36,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/activity_main_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:tag="1"
+            android:text="@string/activity_main_delete"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="326dp" />
 
         <Button
             android:id="@+id/activity_main_pass_button"
@@ -50,20 +64,9 @@
             android:layout_margin="10dp"
             android:background="#98FB98"
             android:tag="3"
-            android:text="@string/activity_main_approve" />
+            android:text="@string/activity_main_contact" />
 
-        <Button
-            android:id="@+id/activity_main_delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#ff0000"
-            android:tag="1"
-            android:text="@string/activity_main_delete"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="326dp" />
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

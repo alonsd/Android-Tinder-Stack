@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">TinderStack</string>
-    <string name="activity_main_delete">Delete</string>
-    <string name="activity_main_pass">Pass</string>
-    <string name="activity_main_approve">Approve</string>
-    <string name="tinder_card_pass">Pass</string>
-    <string name="tinder_card_delete">Delete</string>
+    <string name="activity_main_delete">מחק</string>
+    <string name="activity_main_pass">דלג</string>
+    <string name="activity_main_contact">צור קשר</string>
+    <string name="tinder_card_approve">צור קשר</string>
+    <string name="tinder_card_delete">מחק</string>
     <string name="dialog_fragment_approve_dismiss">Dismiss</string>
     <string name="dialog_fragment_approve_lawyer_approved">Lawyer Approved</string>
 </resources>

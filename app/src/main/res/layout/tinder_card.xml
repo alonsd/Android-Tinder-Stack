@@ -60,6 +60,7 @@
             android:layout_height="wrap_content"
             android:clipChildren="true">
 
+
             <TextView
                 android:id="@+id/tinder_card_pass_textview"
                 android:layout_width="120dp"
@@ -70,9 +71,9 @@
                 android:alpha="0"
                 android:background="@drawable/shape_bg_green_rounded_rect"
                 android:gravity="center"
-                android:text="@string/tinder_card_pass"
-                android:textColor="@color/grey_600"
-                android:textSize="32sp"
+                android:text="@string/tinder_card_approve"
+                android:textColor="@color/green_400"
+                android:textSize="25sp"
                 android:textStyle="bold"
                 tools:alpha="1" />
 

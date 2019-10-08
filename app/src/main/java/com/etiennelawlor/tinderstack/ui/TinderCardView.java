@@ -89,8 +89,11 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             dismissCard(view, -(screenWidth * 2));
           } else if (isCardBeyondRightBoundary(view)) {
+//            onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
+//            dismissCard(view, (screenWidth * 2));
+            showLawyerContactDetailsFragment(topCard);
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
-            dismissCard(view, (screenWidth * 2));
+            resetCard(view);
           } else {
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             resetCard(view);
@@ -125,18 +128,23 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         dismissCard(topCard, -(screenWidth * 2));
         break;
       case 2: //pass button
-        topCard.mPassTextView.setAlpha(1);
-        dismissCard(topCard, (screenWidth * 2));
+//        topCard.mPassTextView.setAlpha(1);
+//        dismissCard(topCard, (screenWidth * 2));
         break;
       case 3: // approve button
-        FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
-        ApproveDialogFragment fragment = new ApproveDialogFragment();
-        String lawyerName = topCard.displayNameTextView.getText().toString();
-        fragment.setApprovedLawyer(lawyerName);
-        fragment.show(fragmentManager, "");
+        showLawyerContactDetailsFragment(topCard);
         break;
     }
   }
+
+  private void showLawyerContactDetailsFragment(TinderCardView topCard) {
+    FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+    ApproveDialogFragment fragment = new ApproveDialogFragment();
+    String lawyerName = topCard.displayNameTextView.getText().toString();
+    fragment.setApprovedLawyer(lawyerName);
+    fragment.show(fragmentManager, "");
+  }
+
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
