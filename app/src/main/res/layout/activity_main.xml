@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/grey_200"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/grey_200">
 
-    <include layout="@layout/toolbar" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.etiennelawlor.tinderstack.ui.TinderStackLayout
+        android:id="@+id/activity_main_tinder_stack_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_200"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        tools:layout_height="500dp">
+        android:layout_height="0dp"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include2" />
 
-        <com.etiennelawlor.tinderstack.ui.TinderStackLayout
-            android:id="@+id/activity_main_tinder_stack_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:layout_width="wrap_content"
-            android:id="@+id/activity_main_delete_button"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#ff0000"
-            android:tag="1"
-            android:text="@string/activity_main_delete" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/activity_main_pass_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#A9A9A9"
             android:tag="2"
             android:text="@string/activity_main_pass" />
 
         <Button
-            android:layout_width="wrap_content"
             android:id="@+id/activity_main_approve_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="#98FB98"
             android:tag="3"
             android:text="@string/activity_main_approve" />
 
+        <Button
+            android:id="@+id/activity_main_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:tag="1"
+            android:text="@string/activity_main_delete"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="326dp" />
     </LinearLayout>
 
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
