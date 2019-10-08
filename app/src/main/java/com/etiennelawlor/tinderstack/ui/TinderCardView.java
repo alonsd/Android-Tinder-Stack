@@ -13,6 +13,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -83,10 +84,10 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         case MotionEvent.ACTION_UP:
           if (isCardBeyondLeftBoundary(view)) {
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
-            dismissCard(view, -(screenWidth * 2), true);
+            dismissCard(view, -(screenWidth * 2));
           } else if (isCardBeyondRightBoundary(view)) {
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
-            dismissCard(view, (screenWidth * 2), false);
+            dismissCard(view, (screenWidth * 2));
           } else {
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             resetCard(view);
@@ -115,13 +116,17 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
     switch (buttonTag){
+      //TODO - check if it is necessary to reduce the alpha down
       case 1: //delete button
-        dismissCard(topCard, -(screenWidth * 2), true);
+        topCard.mDeleteTextView.setAlpha(1);
+        dismissCard(topCard, -(screenWidth * 2));
         break;
       case 2: //pass button
-        dismissCard(topCard, (screenWidth * 2), false);
+        topCard.mPassTextView.setAlpha(1);
+        dismissCard(topCard, (screenWidth * 2));
         break;
       case 3: // approve button
+
         break;
     }
   }
@@ -159,24 +164,12 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   /**
    * This method is being called after we are above a certain boundary (left or right) and animates the card to go off screen to that side.
    */
-  private void dismissCard(final View view, int xPos, Boolean didSelectDelete) {
+  private void dismissCard(final View view, int xPos) {
     view.animate()
         .x(xPos)
         .y(0)
         .setInterpolator(new AccelerateInterpolator())
         .setDuration(DURATION)
-        .setUpdateListener(valueAnimator -> {
-          Log.d("value dismiss - ", String.valueOf(valueAnimator.getAnimatedFraction()));
-          //setting the 'Pass' or 'Delete badges alpha according to the button clicked
-          if (didSelectDelete)
-            mDeleteTextView.setAlpha(1);
-          else
-            mPassTextView.setAlpha(1);
-          if (valueAnimator.getAnimatedFraction() >= 1.0) {
-            mPassTextView.setAlpha(0);
-            mPassTextView.setAlpha(0);
-          }
-        })
         .setListener(new Animator.AnimatorListener() {
           @Override
           public void onAnimationStart(Animator animator) {

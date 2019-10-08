@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Tinder-Stack-With-Callbacks.iml" filepath="$PROJECT_DIR$/Tinder-Stack-With-Callbacks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TinderStack.iml" filepath="$PROJECT_DIR$/TinderStack.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
