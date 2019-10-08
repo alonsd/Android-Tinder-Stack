@@ -74,6 +74,10 @@ public class TinderStackLayout extends FrameLayout {
     if (onCardSwipedListener == null)
       onCardSwipedListener = tinderCardView.getOnCardSwipedListener();
 
+    View topCard = getChildAt(0);
+    if (topCard != null && topCard.equals(tinderCardView)) {
+      return;
+    }
     topCardOnStack = tinderCardView;
 
     ViewGroup.LayoutParams layoutParams;

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private OnCardSwipedListener listener;
   private UserViewModel userViewModel;
   private ArrayList<User> usersList;
-  private int index = 1;
+  private int index = 0;
 
   @BindView(R.id.activity_main_delete_button)
   Button mDeleteButton;
@@ -100,20 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   public void onClick(View view) {
     TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
-    switch (view.getId()) {
-      case R.id.activity_main_approve_button:
-        //show alert dialog - open a dialog with contact information but do nothing with the stack
-
-        break;
-      case R.id.activity_main_pass_button:
-        //next card should appear - this is not a neutral button
-        topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
-        break;
-      case R.id.activity_main_delete_button:
-        //next card should appear - this is a 'dislike' button
-        topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
-        break;
-
-    }
+    topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
   }
 }
