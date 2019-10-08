@@ -5,4 +5,6 @@
     <string name="activity_main_approve">Approve</string>
     <string name="tinder_card_pass">Pass</string>
     <string name="tinder_card_delete">Delete</string>
+    <string name="dialog_fragment_approve_dismiss">Dismiss</string>
+    <string name="dialog_fragment_approve_lawyer_approved">Lawyer Approved</string>
 </resources>

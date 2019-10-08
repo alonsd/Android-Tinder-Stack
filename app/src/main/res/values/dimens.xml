@@ -3,4 +3,6 @@
     <dimen name="card_corner_radius">2dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="touch_raise">6dp</dimen>
+    <dimen name="dialog_fragment_approve_title_size">25sp</dimen>
+    <dimen name="dialog_fragment_approve_name_size">20sp</dimen>
 </resources>

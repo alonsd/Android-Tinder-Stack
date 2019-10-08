@@ -8,7 +8,6 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
 
 import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
-import com.etiennelawlor.tinderstack.utilities.DisplayUtility;
 
 
 public class TinderStackLayout extends FrameLayout {
@@ -18,8 +17,6 @@ public class TinderStackLayout extends FrameLayout {
 
   // Variable members
   private OnCardSwipedListener onCardSwipedListener;
-  private int screenWidth;
-  private int yMultiplier;
 
   //Top card
   private TinderCardView topCardOnStack;
@@ -65,9 +62,6 @@ public class TinderStackLayout extends FrameLayout {
   private void init() {
     setClipChildren(false);
 
-    screenWidth = DisplayUtility.getScreenWidth(getContext());
-    yMultiplier = DisplayUtility.dp2px(getContext(), 8);
-
   }
 
   public void addCard(TinderCardView tinderCardView) {
@@ -90,7 +84,6 @@ public class TinderStackLayout extends FrameLayout {
 
     tinderCardView.animate()
         .x(0)
-        .y(childCount * yMultiplier)
         .scaleX(scaleValue)
         .setInterpolator(new AnticipateOvershootInterpolator())
         .setDuration(DURATION);

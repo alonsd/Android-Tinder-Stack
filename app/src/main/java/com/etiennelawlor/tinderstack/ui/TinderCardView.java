@@ -1,6 +1,7 @@
 package com.etiennelawlor.tinderstack.ui;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.etiennelawlor.tinderstack.R;
 import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
@@ -126,7 +129,11 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         dismissCard(topCard, (screenWidth * 2));
         break;
       case 3: // approve button
-
+        FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+        ApproveDialogFragment fragment = new ApproveDialogFragment();
+        String lawyerName = topCard.displayNameTextView.getText().toString();
+        fragment.setApprovedLawyer(lawyerName);
+        fragment.show(fragmentManager, "");
         break;
     }
   }
