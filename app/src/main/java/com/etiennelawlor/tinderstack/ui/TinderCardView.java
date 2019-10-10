@@ -83,9 +83,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   public boolean onTouch(final View view, MotionEvent motionEvent) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) view.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
-    Log.d("isCardAnimating - ", String.valueOf(isCardAnimating));
     if (topCard.equals(view) && !topCard.isCardAnimating) {
-      Log.d("isCardAnimating - in", String.valueOf(isCardAnimating));
       switch (motionEvent.getAction()) {
         case MotionEvent.ACTION_DOWN:
           oldX = motionEvent.getX();
@@ -95,7 +93,6 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
           return true;
         case MotionEvent.ACTION_UP:
           if (isCardBeyondLeftBoundary(view)) {
-            Log.d("top card dismissed - ", topCard.usernameTextView.getText().toString());
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             dismissCard(view, -(screenWidth * 2));
           } else if (isCardBeyondRightBoundary(view)) {
@@ -129,14 +126,16 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   public void handleButtonPressed(int buttonTag) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
-    if(topCard.isCardAnimating) {
+    if(isCardAnimating) {
       return;
     }
     switch (buttonTag){
       case DELETE_BUTTON_PRESSED:
+        isCardAnimating = true;
         deleteCard(topCard);
         break;
       case PASS_BUTTON_PRESSED:
+        isCardAnimating = true;
         passCard(topCard);
         break;
       case APPROVE_BUTTON_PRESSED:
@@ -146,12 +145,10 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   }
 
   private void deleteCard(TinderCardView topCard) {
-    isCardAnimating = true;
     topCard.mDeleteTextView.setAlpha(ALPHA_VISIBLE);
     dismissCard(topCard, -(screenWidth * 2));
   }
   private void passCard(TinderCardView topCard) {
-    isCardAnimating = true;
     topCard.mPassTextView.setAlpha(ALPHA_VISIBLE);
     dismissCard(topCard, -(screenWidth * 2));
   }
