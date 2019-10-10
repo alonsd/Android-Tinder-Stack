@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   public void onClick(View view) {
     TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
-    topCardOnStack.handleButtonPressed(Integer.valueOf(String.valueOf(view.getTag())));
+    int buttonTag = Integer.valueOf(String.valueOf(view.getTag()));
+    topCardOnStack.handleButtonPressed(buttonTag);
   }
 }
