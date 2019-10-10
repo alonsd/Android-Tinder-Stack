@@ -1,11 +1,9 @@
 package com.etiennelawlor.tinderstack.ui;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -37,12 +34,15 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private static final float CARD_ROTATION_DEGREES = 40.0f;
   private static final float BADGE_ROTATION_DEGREES = 15.0f;
   private static final int DURATION = 700;
+  public static final int DELETE_BUTTON_PRESSED = 1;
+  public static final int PASS_BUTTON_PRESSED = 2;
+  public static final int APPROVE_BUTTON_PRESSED = 3;
   //Views
   private ImageView imageView;
   private TextView displayNameTextView;
   private TextView usernameTextView;
   private TextView mPassTextView;
-  private TextView mDeleteTextView;
+  private TextView mDeleteOrPassTextView;
   // Member Variables
   private float oldX;
   private float oldY;
@@ -71,7 +71,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     this.onCardSwipedListener = onCardSwipedListener;
     init(context, attrs);
   }
-  // View.OnTouchListener Methods
+
+
   @Override
   public boolean onTouch(final View view, MotionEvent motionEvent) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) view.getParent());
@@ -89,8 +90,6 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             dismissCard(view, -(screenWidth * 2));
           } else if (isCardBeyondRightBoundary(view)) {
-//            onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
-//            dismissCard(view, (screenWidth * 2));
             showLawyerContactDetailsFragment(topCard);
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             resetCard(view);
@@ -122,19 +121,25 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
     switch (buttonTag){
-      //TODO - check if it is necessary to reduce the alpha down
-      case 1: //delete button
-        topCard.mDeleteTextView.setAlpha(1);
-        dismissCard(topCard, -(screenWidth * 2));
+      case DELETE_BUTTON_PRESSED:
+        topCard.mDeleteOrPassTextView.getBackground().setTint(this.getResources().getColor(R.color.red_700));
+        passCard(topCard);
         break;
-      case 2: //pass button
-//        topCard.mPassTextView.setAlpha(1);
-//        dismissCard(topCard, (screenWidth * 2));
+      case PASS_BUTTON_PRESSED: //TODO fix color back to relevant button clicked
+        topCard.mDeleteOrPassTextView.setText(R.string.tinder_card_view_pass);
+        topCard.mDeleteOrPassTextView.setTextColor(this.getResources().getColor(R.color.grey_600));
+        topCard.mDeleteOrPassTextView.getBackground().setTint(this.getResources().getColor(R.color.grey_600));
+        passCard(topCard);
         break;
-      case 3: // approve button
+      case APPROVE_BUTTON_PRESSED:
         showLawyerContactDetailsFragment(topCard);
         break;
     }
+  }
+
+  private void passCard(TinderCardView topCard) {
+    topCard.mDeleteOrPassTextView.setAlpha(1);
+    dismissCard(topCard, -(screenWidth * 2));
   }
 
   private void showLawyerContactDetailsFragment(TinderCardView topCard) {
@@ -158,9 +163,9 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       displayNameTextView = findViewById(R.id.display_name_tv);
       usernameTextView = findViewById(R.id.username_tv);
       mPassTextView = findViewById(R.id.tinder_card_pass_textview);
-      mDeleteTextView = findViewById(R.id.tinder_card_delete_text_view);
+      mDeleteOrPassTextView = findViewById(R.id.tinder_card_delete_text_view);
       mPassTextView.setRotation(-(BADGE_ROTATION_DEGREES));
-      mDeleteTextView.setRotation(BADGE_ROTATION_DEGREES);
+      mDeleteOrPassTextView.setRotation(BADGE_ROTATION_DEGREES);
       screenWidth = DisplayUtility.getScreenWidth(context);
       leftBoundary = screenWidth * (1.0f / 6.0f); // Left 1/6 of screen
       rightBoundary = screenWidth * (5.0f / 6.0f); // Right 1/6 of screen
@@ -215,7 +220,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         .setInterpolator(new OvershootInterpolator())
         .setDuration(DURATION);
     mPassTextView.setAlpha(0);
-    mDeleteTextView.setAlpha(0);
+    mDeleteOrPassTextView.setAlpha(0);
   }
   /**
    * Sets card rotation after we swipe to a legal direction (left or right)
@@ -235,7 +240,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private void updateAlphaOfBadges(float posX) {
     float alpha = (posX - padding) / (screenWidth * 0.50f);
     mPassTextView.setAlpha(alpha);
-    mDeleteTextView.setAlpha(-alpha);
+    mDeleteOrPassTextView.setAlpha(-alpha);
   }
   /**
    * Binds a user object to a card object

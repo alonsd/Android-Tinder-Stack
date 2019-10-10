@@ -6,5 +6,6 @@
     <string name="tinder_card_approve">צור קשר</string>
     <string name="tinder_card_delete">מחק</string>
     <string name="dialog_fragment_approve_dismiss">Dismiss</string>
-    <string name="dialog_fragment_approve_lawyer_approved">Lawyer Approved</string>
+    <string name="dialog_fragment_approve_lawyer_approved">Lawyer Details</string>
+    <string name="tinder_card_view_pass">דלג</string>
 </resources>
