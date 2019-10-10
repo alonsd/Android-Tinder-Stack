@@ -1,9 +1,11 @@
 package com.etiennelawlor.tinderstack.ui;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +39,16 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   public static final int DELETE_BUTTON_PRESSED = 1;
   public static final int PASS_BUTTON_PRESSED = 2;
   public static final int APPROVE_BUTTON_PRESSED = 3;
+  public static final int ALPHA_INVISIBLE = 0;
+  public static final int ALPHA_VISIBLE = 1;
   //Views
   private ImageView imageView;
   private TextView displayNameTextView;
   private TextView usernameTextView;
+  private TextView mContactTextView;
+  private TextView mDeleteTextView;
   private TextView mPassTextView;
-  private TextView mDeleteOrPassTextView;
+  private TinderCardView topCard;
   // Member Variables
   private float oldX;
   private float oldY;
@@ -54,6 +60,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private float leftBoundary;
   private int screenWidth;
   private int padding;
+  private boolean isCardAnimating;
   private OnCardSwipedListener onCardSwipedListener;
   // Constructors
   public TinderCardView(Context context, OnCardSwipedListener onCardSwipedListener) {
@@ -72,12 +79,13 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     init(context, attrs);
   }
 
-
   @Override
   public boolean onTouch(final View view, MotionEvent motionEvent) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) view.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
-    if (topCard.equals(view)) {
+    Log.d("isCardAnimating - ", String.valueOf(isCardAnimating));
+    if (topCard.equals(view) && !topCard.isCardAnimating) {
+      Log.d("isCardAnimating - in", String.valueOf(isCardAnimating));
       switch (motionEvent.getAction()) {
         case MotionEvent.ACTION_DOWN:
           oldX = motionEvent.getX();
@@ -87,6 +95,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
           return true;
         case MotionEvent.ACTION_UP:
           if (isCardBeyondLeftBoundary(view)) {
+            Log.d("top card dismissed - ", topCard.usernameTextView.getText().toString());
             onCardSwipedListener.send(new TopCardMovedEvent(-(screenWidth)));
             dismissCard(view, -(screenWidth * 2));
           } else if (isCardBeyondRightBoundary(view)) {
@@ -120,15 +129,14 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   public void handleButtonPressed(int buttonTag) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
+    if(topCard.isCardAnimating) {
+      return;
+    }
     switch (buttonTag){
       case DELETE_BUTTON_PRESSED:
-        topCard.mDeleteOrPassTextView.getBackground().setTint(this.getResources().getColor(R.color.red_700));
-        passCard(topCard);
+        deleteCard(topCard);
         break;
-      case PASS_BUTTON_PRESSED: //TODO fix color back to relevant button clicked
-        topCard.mDeleteOrPassTextView.setText(R.string.tinder_card_view_pass);
-        topCard.mDeleteOrPassTextView.setTextColor(this.getResources().getColor(R.color.grey_600));
-        topCard.mDeleteOrPassTextView.getBackground().setTint(this.getResources().getColor(R.color.grey_600));
+      case PASS_BUTTON_PRESSED:
         passCard(topCard);
         break;
       case APPROVE_BUTTON_PRESSED:
@@ -137,8 +145,14 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     }
   }
 
+  private void deleteCard(TinderCardView topCard) {
+    isCardAnimating = true;
+    topCard.mDeleteTextView.setAlpha(ALPHA_VISIBLE);
+    dismissCard(topCard, -(screenWidth * 2));
+  }
   private void passCard(TinderCardView topCard) {
-    topCard.mDeleteOrPassTextView.setAlpha(1);
+    isCardAnimating = true;
+    topCard.mPassTextView.setAlpha(ALPHA_VISIBLE);
     dismissCard(topCard, -(screenWidth * 2));
   }
 
@@ -162,10 +176,11 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       imageView = findViewById(R.id.iv);
       displayNameTextView = findViewById(R.id.display_name_tv);
       usernameTextView = findViewById(R.id.username_tv);
-      mPassTextView = findViewById(R.id.tinder_card_pass_textview);
-      mDeleteOrPassTextView = findViewById(R.id.tinder_card_delete_text_view);
-      mPassTextView.setRotation(-(BADGE_ROTATION_DEGREES));
-      mDeleteOrPassTextView.setRotation(BADGE_ROTATION_DEGREES);
+      mContactTextView = findViewById(R.id.tinder_card_contact_textview);
+      mDeleteTextView = findViewById(R.id.tinder_card_delete_text_view);
+      mPassTextView = findViewById(R.id.tinder_card_pass_text_view);
+      mContactTextView.setRotation(-(BADGE_ROTATION_DEGREES));
+      mDeleteTextView.setRotation(BADGE_ROTATION_DEGREES);
       screenWidth = DisplayUtility.getScreenWidth(context);
       leftBoundary = screenWidth * (1.0f / 6.0f); // Left 1/6 of screen
       rightBoundary = screenWidth * (5.0f / 6.0f); // Right 1/6 of screen
@@ -193,11 +208,13 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         .setListener(new Animator.AnimatorListener() {
           @Override
           public void onAnimationStart(Animator animator) {
+            isCardAnimating = true;
           }
           @Override
           public void onAnimationEnd(Animator animator) {
             ViewGroup viewGroup = (ViewGroup) view.getParent();
             if (viewGroup != null) {
+              isCardAnimating = false;
               viewGroup.removeView(view);
             }
           }
@@ -219,8 +236,9 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         .rotation(0)
         .setInterpolator(new OvershootInterpolator())
         .setDuration(DURATION);
-    mPassTextView.setAlpha(0);
-    mDeleteOrPassTextView.setAlpha(0);
+    mContactTextView.setAlpha(ALPHA_INVISIBLE);
+    mDeleteTextView.setAlpha(ALPHA_INVISIBLE);
+    mPassTextView.setAlpha(ALPHA_INVISIBLE);
   }
   /**
    * Sets card rotation after we swipe to a legal direction (left or right)
@@ -239,8 +257,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
    */
   private void updateAlphaOfBadges(float posX) {
     float alpha = (posX - padding) / (screenWidth * 0.50f);
-    mPassTextView.setAlpha(alpha);
-    mDeleteOrPassTextView.setAlpha(-alpha);
+    mContactTextView.setAlpha(alpha);
+    mDeleteTextView.setAlpha(-alpha);
   }
   /**
    * Binds a user object to a card object
@@ -283,5 +301,4 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     }
     return false;
   }
-
 }

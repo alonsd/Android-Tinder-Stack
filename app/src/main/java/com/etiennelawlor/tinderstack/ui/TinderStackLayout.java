@@ -12,8 +12,7 @@ import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
 
 public class TinderStackLayout extends FrameLayout {
 
-  // Constants
-  private static final int DURATION = 300;
+
 
   // Variable members
   private OnCardSwipedListener onCardSwipedListener;
@@ -77,16 +76,11 @@ public class TinderStackLayout extends FrameLayout {
     ViewGroup.LayoutParams layoutParams;
     layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-    int childCount = getChildCount();
     addView(tinderCardView, 0, layoutParams);
-
-    float scaleValue = 1 - (childCount / 50.0f);
 
     tinderCardView.animate()
         .x(0)
-        //.scaleX(scaleValue)
-        .setInterpolator(new AnticipateOvershootInterpolator())
-        .setDuration(DURATION);
+        .setInterpolator(new AnticipateOvershootInterpolator());
   }
 
   public TinderCardView getTopCardOnStack() {
