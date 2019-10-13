@@ -2,6 +2,7 @@ package com.etiennelawlor.tinderstack.utilities;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -12,6 +13,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.etiennelawlor.tinderstack.models.User.User;
 import com.etiennelawlor.tinderstack.models.User.UserDao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Database(entities = {User.class}, version = 1, exportSchema = false)
 public abstract class UserDatabase extends RoomDatabase {
@@ -21,6 +25,8 @@ public abstract class UserDatabase extends RoomDatabase {
   public abstract UserDao userDao();
 
   public static synchronized UserDatabase getInstance(Context context) {
+
+    Log.d("inside observe - ", "inside database");
 
     if (instance == null) {
       instance = Room.databaseBuilder(context.getApplicationContext(), UserDatabase.class, "user_database").fallbackToDestructiveMigration().addCallback(roomUserCallback).build();
@@ -51,9 +57,11 @@ public abstract class UserDatabase extends RoomDatabase {
 
     @Override
     protected Void doInBackground(Void... voids) {
-      userDao.insert(new User(URL, "Barak Obama", "/@BarakObama"));
-      userDao.insert(new User(URL2, "Barak Obama2", "/@BarakObama2"));
-      userDao.insert(new User(URL3, "Barak Obama3", "/@BarakObama3"));
+      List<User> users = new ArrayList<>();
+      users.add(new User(URL, "Barak Obama1", "/@BarakObama1"));
+      users.add(new User(URL2, "Barak Obama2", "/@BarakObama2"));
+      users.add(new User(URL3, "Barak Obama3", "/@BarakObama3"));
+      userDao.insertListOfUsers(users);
       return null;
     }
   }

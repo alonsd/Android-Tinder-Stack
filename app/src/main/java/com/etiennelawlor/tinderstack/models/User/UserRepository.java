@@ -2,6 +2,8 @@ package com.etiennelawlor.tinderstack.models.User;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import com.etiennelawlor.tinderstack.utilities.UserDatabase;
 import java.util.List;
@@ -30,10 +32,11 @@ public class UserRepository {
   }
 
   public void deleteAllUsers() {
-    new DeleteAllUsersAsyncTask();
+    new DeleteAllUsersAsyncTask(userDao);
   }
 
   public LiveData<List<User>> getAllUsers() {
+    Log.d("inside observe - ", "inside repository");
     return allUsers;
   }
 
@@ -87,7 +90,7 @@ public class UserRepository {
 
     private UserDao userDao;
 
-    private DeleteAllUsersAsyncTask() {
+    private DeleteAllUsersAsyncTask(UserDao userDao) {
       this.userDao = userDao;
     }
 

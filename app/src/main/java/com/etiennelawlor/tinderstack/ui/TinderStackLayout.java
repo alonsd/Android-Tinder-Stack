@@ -7,15 +7,9 @@ import android.view.ViewGroup;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
 
-import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
-
 
 public class TinderStackLayout extends FrameLayout {
 
-
-
-  // Variable members
-  private OnCardSwipedListener onCardSwipedListener;
 
   //Top card
   private TinderCardView topCardOnStack;
@@ -39,20 +33,6 @@ public class TinderStackLayout extends FrameLayout {
   }
 
   @Override
-  public void addView(View child, int index, ViewGroup.LayoutParams params) {
-    super.addView(child, index, params);
-    if (onCardSwipedListener != null)
-      onCardSwipedListener.onNext(getChildCount());
-  }
-
-  @Override
-  public void removeView(View view) {
-    super.removeView(view);
-    if (onCardSwipedListener != null)
-      onCardSwipedListener.onNext(getChildCount());
-  }
-
-  @Override
   public void onDetachedFromWindow() {
     super.onDetachedFromWindow();
   }
@@ -64,13 +44,11 @@ public class TinderStackLayout extends FrameLayout {
   }
 
   public void addCard(TinderCardView tinderCardView) {
-    if (onCardSwipedListener == null)
-      onCardSwipedListener = tinderCardView.getOnCardSwipedListener();
-
     View topCard = getChildAt(0);
     if (topCard != null && topCard.equals(tinderCardView)) {
       return;
     }
+
     topCardOnStack = tinderCardView;
 
     ViewGroup.LayoutParams layoutParams;

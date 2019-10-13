@@ -1,6 +1,7 @@
 package com.etiennelawlor.tinderstack.models.ViewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -40,6 +41,7 @@ public class UserViewModel extends AndroidViewModel {
   }
 
   public LiveData<List<User>> getAllUsers() {
+    Log.d("inside observe - ", "inside viewmodel");
     return allUsers;
   }
 }

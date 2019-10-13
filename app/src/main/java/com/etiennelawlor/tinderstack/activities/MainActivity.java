@@ -1,33 +1,32 @@
 package com.etiennelawlor.tinderstack.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-
 import com.etiennelawlor.tinderstack.R;
-import com.etiennelawlor.tinderstack.bus.events.OnCardSwipedListener;
 import com.etiennelawlor.tinderstack.models.User.User;
 import com.etiennelawlor.tinderstack.models.ViewModel.UserViewModel;
 import com.etiennelawlor.tinderstack.ui.TinderCardView;
 import com.etiennelawlor.tinderstack.ui.TinderStackLayout;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-  private static final int STACK_SIZE = 2;
 
   private TinderStackLayout tinderStackLayout;
-  private OnCardSwipedListener listener;
-  private UserViewModel userViewModel;
   private ArrayList<User> usersList;
-  private int index = 0;
+
+  UserViewModel userViewModel;
 
   @BindView(R.id.activity_main_delete_button)
   Button mDeleteButton;
@@ -44,10 +43,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
-    observeLiveData();
-
     initViewsAndListeners();
+    fetchUserList();
+  }
+
+  private void fetchUserList() {
+    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+    final Observer<List<User>> userObserver = users -> {
+      Log.d("inside observe - ", "inside main activity, db list size - " + users.size());
+      usersList = (ArrayList<User>) users;
+      Log.d("inside observe - ", "inside main activity, array list size - " + usersList.size());
+      addCards();
+    };
+    userViewModel.getAllUsers().observe(this, userObserver);
+  }
+
+  private void addCards(){
+    tinderStackLayout.removeAllViews();
+    TinderCardView tinderCardView;
+    for (int i = 0; i < usersList.size(); i++) {
+      tinderCardView = new TinderCardView(this);
+      tinderCardView.bind(usersList.get(i));
+      Log.d("inside observe - ", "inside main activity, user value - " + usersList.get(i).getUsername());
+      tinderStackLayout.addCard(tinderCardView);
+      Log.d("addCardCalled - ", "\nindex value - " + i + "\n" +
+          "userlist size - " + usersList.size());
+    }
+  }
+
+  @Override
+  public void onClick(View view) {
+    int buttonTag = Integer.valueOf(String.valueOf(view.getTag()));
+    TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
+    topCardOnStack.handleButtonPressed(buttonTag);
   }
 
   private void initViewsAndListeners() {
@@ -55,55 +83,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     mDeleteButton = findViewById(R.id.activity_main_delete_button);
     mPassButton = findViewById(R.id.activity_main_pass_button);
     mApproveButton = findViewById(R.id.activity_main_approve_button);
+    usersList = new ArrayList<>();
     mDeleteButton.setOnClickListener(this);
     mApproveButton.setOnClickListener(this);
     mPassButton.setOnClickListener(this);
-    listener = new OnCardSwipedListener() {
-      @Override
-      public void send(Object object) {
-
-      }
-
-      @Override
-      public void onNext(Integer integer) {
-
-
-        if (integer == 1) {
-          addCards(1);
-        }
-
-      }
-    };
-  }
-
-  private void observeLiveData() {
-    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-    userViewModel.getAllUsers().observe(this, users -> {
-      //update a new list of users
-      usersList = (ArrayList) users;
-      addCards(-1);
-    });
-  }
-
-
-  private void addCards(int stackSizeToAdd) {
-    TinderCardView tinderCardView;
-    for (int i = index; index < i + (STACK_SIZE + stackSizeToAdd); index++) {
-      if (index >= usersList.size()) {
-        index = 0;
-        i = 0;
-        addCards(-1);
-      }
-      tinderCardView = new TinderCardView(this, listener);
-      tinderCardView.bind(usersList.get(index));
-      tinderStackLayout.addCard(tinderCardView);
-    }
-  }
-
-  @Override
-  public void onClick(View view) {
-    TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
-    int buttonTag = Integer.valueOf(String.valueOf(view.getTag()));
-    topCardOnStack.handleButtonPressed(buttonTag);
   }
 }
