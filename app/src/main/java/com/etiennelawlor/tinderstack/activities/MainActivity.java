@@ -23,10 +23,11 @@ import butterknife.BindView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
 
+  public static final int POSITION_FIRST = 0;
   private TinderStackLayout tinderStackLayout;
   private ArrayList<User> usersList;
 
-  UserViewModel userViewModel;
+  public UserViewModel userViewModel;
 
   @BindView(R.id.activity_main_delete_button)
   Button mDeleteButton;
@@ -58,16 +59,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     userViewModel.getAllUsers().observe(this, userObserver);
   }
 
-  private void addCards(){
+  public void addCards(){
     tinderStackLayout.removeAllViews();
     TinderCardView tinderCardView;
     for (int i = 0; i < usersList.size(); i++) {
       tinderCardView = new TinderCardView(this);
-      tinderCardView.bind(usersList.get(i));
+      tinderCardView.setUserOnCard(usersList.get(i));
       Log.d("inside observe - ", "inside main activity, user value - " + usersList.get(i).getUsername());
-      tinderStackLayout.addCard(tinderCardView);
-      Log.d("addCardCalled - ", "\nindex value - " + i + "\n" +
-          "userlist size - " + usersList.size());
+      tinderStackLayout.addCard(tinderCardView, POSITION_FIRST);
     }
   }
 
@@ -75,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public void onClick(View view) {
     int buttonTag = Integer.valueOf(String.valueOf(view.getTag()));
     TinderCardView topCardOnStack = tinderStackLayout.getTopCardOnStack();
+    if (topCardOnStack == null) {
+      addCards();
+      return;
+    }
     topCardOnStack.handleButtonPressed(buttonTag);
   }
 

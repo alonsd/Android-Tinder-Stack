@@ -1,24 +1,25 @@
 package com.etiennelawlor.tinderstack.ui;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.etiennelawlor.tinderstack.R;
+import com.etiennelawlor.tinderstack.activities.MainActivity;
 import com.etiennelawlor.tinderstack.models.User.User;
 import com.etiennelawlor.tinderstack.utilities.DisplayUtility;
 import com.squareup.picasso.Picasso;
@@ -58,16 +59,20 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private int screenWidth;
   private int padding;
   private boolean isCardAnimating;
-  private User cardUser;
+
+  private User userOnCard;
+
   // Constructors
   public TinderCardView(Context context) {
     super(context);
     init(context, null);
   }
+
   public TinderCardView(Context context, AttributeSet attrs) {
     super(context, attrs);
     init(context, attrs);
   }
+
   public TinderCardView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     init(context, attrs);
@@ -113,13 +118,14 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     }
     return super.onTouchEvent(motionEvent);
   }
+
   public void handleButtonPressed(int buttonTag) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
-    TinderCardView topCard = (TinderCardView) tinderStackLayout.getChildAt(tinderStackLayout.getChildCount() - 1);
-    if(isCardAnimating) {
+    TinderCardView topCard = tinderStackLayout.getTopCardOnStack();
+    if (isCardAnimating || topCard == null) {
       return;
     }
-    switch (buttonTag){
+    switch (buttonTag) {
       case DELETE_BUTTON_PRESSED:
         isCardAnimating = true;
         deleteCard(topCard);
@@ -127,7 +133,6 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       case PASS_BUTTON_PRESSED:
         isCardAnimating = true;
         passCard(topCard);
-
         break;
       case APPROVE_BUTTON_PRESSED:
         showLawyerContactDetailsFragment(topCard);
@@ -139,6 +144,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     topCard.mDeleteTextView.setAlpha(ALPHA_VISIBLE);
     dismissCard(topCard, -(screenWidth * 2), true);
   }
+
   private void passCard(TinderCardView topCard) {
     topCard.mPassTextView.setAlpha(ALPHA_VISIBLE);
     dismissCard(topCard, -(screenWidth * 2), false);
@@ -157,6 +163,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     super.onDetachedFromWindow();
     setOnTouchListener(null);
   }
+
   // Helper Methods
   private void init(Context context, AttributeSet attrs) {
     if (!isInEditMode()) {
@@ -176,18 +183,21 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       setOnTouchListener(this);
     }
   }
+
   // Check if card's middle is beyond the left boundary
   private boolean isCardBeyondLeftBoundary(View view) {
     return (view.getX() + (view.getWidth() / 2) < leftBoundary);
   }
+
   // Check if card's middle is beyond the right boundary
   private boolean isCardBeyondRightBoundary(View view) {
     return (view.getX() + (view.getWidth() / 2) > rightBoundary);
   }
+
   /**
    * This method is being called after we are above a certain boundary (left or right) and animates the card to go off screen to that side.
    */
-  private void dismissCard(final View view, int xPos, boolean shouldRemoveView) {
+  private void dismissCard(final View view, int xPos, boolean shouldDeleteView) {
     view.animate()
         .x(xPos)
         .y(0)
@@ -198,33 +208,47 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
           public void onAnimationStart(Animator animator) {
             isCardAnimating = true;
           }
+
           @Override
           public void onAnimationEnd(Animator animator) {
-            ViewGroup viewGroup = (ViewGroup) view.getParent();
-            //Toast.makeText(getContext(),"parent child count - " + viewGroup.getChildCount(), Toast.LENGTH_SHORT).show();
-            if (viewGroup != null) {
-              isCardAnimating = false;
-              if (shouldRemoveView)
-                viewGroup.removeView(view);
-              else {
-                if (view.getParent() != null)
-                  viewGroup.removeView(view);
-                TinderCardView tinderCardView = new TinderCardView(getContext());
-                tinderCardView.bind(cardUser);
-                ((TinderStackLayout)viewGroup).addCard(tinderCardView);
-//                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                viewGroup.addView(view,viewGroup.getChildCount() - 1, layoutParams);
-              }
-            }
+            handleViewAfterAnimation(view, shouldDeleteView);
           }
+
           @Override
           public void onAnimationCancel(Animator animator) {
           }
+
           @Override
           public void onAnimationRepeat(Animator animator) {
           }
         });
   }
+
+  /**
+   * This method handles passing or deleting the currently visible card view
+   *
+   * @param view             - the view currently being passed/deleted
+   * @param shouldDeleteView - determines if we should delete the view as a child or put it back inside the stack
+   */
+  private void handleViewAfterAnimation(View view, boolean shouldDeleteView) {
+
+    isCardAnimating = false;
+    TinderStackLayout tinderStackLayout = (TinderStackLayout) view.getParent();
+    if (tinderStackLayout == null)
+      return;
+    if (shouldDeleteView) {
+      if (view instanceof TinderCardView) {
+        ((MainActivity) getContext()).userViewModel.delete(((TinderCardView) view).getUserOnCard());
+        tinderStackLayout.removeView(view);
+        return;
+      }
+    }
+    tinderStackLayout.removeView(view);
+    if (tinderStackLayout.getTopCardOnStack() == null) {
+      ((MainActivity)getContext()).addCards();
+    }
+  }
+
   /**
    * This method resets the card back to it's place because we tried to swipe it up or down.
    */
@@ -239,6 +263,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     mDeleteTextView.setAlpha(ALPHA_INVISIBLE);
     mPassTextView.setAlpha(ALPHA_INVISIBLE);
   }
+
   /**
    * Sets card rotation after we swipe to a legal direction (left or right)
    */
@@ -251,6 +276,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       view.setRotation(-rotation);
     }
   }
+
   /**
    * Updates the alpha of the badges - "like" or "nope"
    */
@@ -259,17 +285,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     mContactTextView.setAlpha(alpha);
     mDeleteTextView.setAlpha(-alpha);
   }
-  /**
-   * Binds a cardUser object to a card object
-   */
-  public void bind(User user) {
-    if (user == null)
-      return;
-    cardUser = user;
-    setUpImage(imageView, user);
-    setUpDisplayName(displayNameTextView, user);
-    setUpUsername(usernameTextView, user);
-  }
+
+
   private void setUpImage(ImageView iv, User user) {
     String avatarUrl = user.getAvatarUrl();
     if (!TextUtils.isEmpty(avatarUrl)) {
@@ -278,12 +295,14 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
           .into(iv);
     }
   }
+
   private void setUpDisplayName(TextView tv, User user) {
     String displayName = user.getDisplayName();
     if (!TextUtils.isEmpty(displayName)) {
       tv.setText(displayName);
     }
   }
+
   private void setUpUsername(TextView tv, User user) {
     String username = user.getUsername();
     if (!TextUtils.isEmpty(username)) {
@@ -297,5 +316,21 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
       return this.usernameTextView.getText().equals(((TinderCardView) other).usernameTextView.getText());
     }
     return false;
+  }
+
+  public User getUserOnCard() {
+    return userOnCard;
+  }
+
+  /**
+   * Binds a user object to a card object
+   */
+  public void setUserOnCard(User user) {
+    this.userOnCard = user;
+    if (user == null)
+      return;
+    setUpImage(imageView, user);
+    setUpDisplayName(displayNameTextView, user);
+    setUpUsername(usernameTextView, user);
   }
 }

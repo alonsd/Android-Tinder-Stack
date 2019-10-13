@@ -4,17 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
 
 
 public class TinderStackLayout extends FrameLayout {
 
-
-  //Top card
-  private TinderCardView topCardOnStack;
-
-
+  public static final int LIST_SIZE = 3;
+  int numberOfCardsPassed = 1;
 
   //Constructors
   public TinderStackLayout(Context context) {
@@ -33,6 +29,15 @@ public class TinderStackLayout extends FrameLayout {
   }
 
   @Override
+  public void addView(View child, int index, ViewGroup.LayoutParams params) {
+    super.addView(child, index, params);
+    numberOfCardsPassed++;
+    if (numberOfCardsPassed > LIST_SIZE) {
+      numberOfCardsPassed = 1;
+    }
+  }
+
+  @Override
   public void onDetachedFromWindow() {
     super.onDetachedFromWindow();
   }
@@ -43,25 +48,23 @@ public class TinderStackLayout extends FrameLayout {
 
   }
 
-  public void addCard(TinderCardView tinderCardView) {
-    View topCard = getChildAt(0);
-    if (topCard != null && topCard.equals(tinderCardView)) {
+  public void addCard(TinderCardView tinderCardView, int addToPosition) {
+    View lastCardAdded = getChildAt(0);
+    if (lastCardAdded != null && lastCardAdded.equals(tinderCardView)) {
       return;
     }
-
-    topCardOnStack = tinderCardView;
 
     ViewGroup.LayoutParams layoutParams;
     layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-    addView(tinderCardView, 0, layoutParams);
+    addView(tinderCardView, addToPosition, layoutParams);
 
-    tinderCardView.animate()
-        .x(0)
-        .setInterpolator(new AnticipateOvershootInterpolator());
+//    tinderCardView.animate()
+//        .x(0)
+//        .setInterpolator(new AnticipateOvershootInterpolator());
   }
 
   public TinderCardView getTopCardOnStack() {
-    return topCardOnStack;
+    return (TinderCardView) getChildAt(getChildCount() - 1);
   }
 }
