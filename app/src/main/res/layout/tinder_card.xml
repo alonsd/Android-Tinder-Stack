@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_cv"
+    android:id="@+id/root_card_view"
     style="@style/CardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <com.etiennelawlor.tinderstack.ui.DynamicHeightImageView
-                android:id="@+id/iv"
+                android:id="@+id/tinder_card_user_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="88dp"
@@ -36,7 +36,7 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/display_name_tv"
+                    android:id="@+id/tinder_card_display_name_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
@@ -44,7 +44,7 @@
                     android:textSize="22sp" />
 
                 <TextView
-                    android:id="@+id/username_tv"
+                    android:id="@+id/tinder_card_username_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
@@ -62,7 +62,7 @@
 
 
             <TextView
-                android:id="@+id/tinder_card_contact_textview"
+                android:id="@+id/tinder_card_contact_text_view"
                 android:layout_width="120dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="24dp"

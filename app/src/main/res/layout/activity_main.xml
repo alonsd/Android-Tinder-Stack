@@ -7,8 +7,8 @@
     android:background="@color/grey_200">
 
     <include
-        android:id="@+id/include2"
-        layout="@layout/toolbar"
+        android:id="@+id/main_activity_toolbar"
+        layout="@layout/main_activity_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:layout_constraintTop_toBottomOf="@+id/main_activity_toolbar"
         app:layout_constraintVertical_bias="0.0"/>
 
     <LinearLayout
@@ -41,8 +41,8 @@
             android:id="@+id/activity_main_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#ff0000"
+            android:layout_margin="@dimen/main_activity_margin_10dp"
+            android:background="@color/main_activity_delete_button_color"
             android:tag="1"
             android:text="@string/activity_main_delete"
             tools:layout_editor_absoluteX="0dp"
@@ -52,8 +52,8 @@
             android:id="@+id/activity_main_pass_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#A9A9A9"
+            android:layout_margin="@dimen/main_activity_margin_10dp"
+            android:background="@color/main_activity_pass_button_color"
             android:tag="2"
             android:text="@string/activity_main_pass" />
 
@@ -61,8 +61,8 @@
             android:id="@+id/activity_main_approve_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#98FB98"
+            android:layout_margin="@dimen/main_activity_margin_10dp"
+            android:background="@color/main_activity_contact_button_color"
             android:tag="3"
             android:text="@string/activity_main_contact" />
 

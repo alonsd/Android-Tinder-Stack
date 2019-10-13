@@ -5,4 +5,5 @@
     <dimen name="touch_raise">6dp</dimen>
     <dimen name="dialog_fragment_approve_title_size">25sp</dimen>
     <dimen name="dialog_fragment_approve_name_size">20sp</dimen>
+    <dimen name="main_activity_margin_10dp">10dp</dimen>
 </resources>

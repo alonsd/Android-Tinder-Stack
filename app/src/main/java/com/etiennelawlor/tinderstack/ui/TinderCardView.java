@@ -160,10 +160,10 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private void init(Context context, AttributeSet attrs) {
     if (!isInEditMode()) {
       inflate(context, R.layout.tinder_card, this);
-      mUserPhotoImageView = findViewById(R.id.iv);
-      mDisplayNameTextView = findViewById(R.id.display_name_tv);
-      mUsernameTextView = findViewById(R.id.username_tv);
-      mContactTextView = findViewById(R.id.tinder_card_contact_textview);
+      mUserPhotoImageView = findViewById(R.id.tinder_card_user_image_view);
+      mDisplayNameTextView = findViewById(R.id.tinder_card_display_name_text_view);
+      mUsernameTextView = findViewById(R.id.tinder_card_username_text_view);
+      mContactTextView = findViewById(R.id.tinder_card_contact_text_view);
       mDeleteTextView = findViewById(R.id.tinder_card_delete_text_view);
       mPassTextView = findViewById(R.id.tinder_card_pass_text_view);
       mContactTextView.setRotation(-(BADGE_ROTATION_DEGREES));

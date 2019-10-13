@@ -13,7 +13,9 @@
 
     <color name="light_green">#53DAB1</color>
     <color name="light_red">#F85068</color>
-
+    <color name="main_activity_contact_button_color">#98FB98</color>
+    <color name="main_activity_pass_button_color">#A9A9A9</color>
+    <color name="main_activity_delete_button_color">#ff0000</color>
 
 
 </resources>

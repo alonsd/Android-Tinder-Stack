@@ -2,7 +2,6 @@ package com.etiennelawlor.tinderstack.utilities;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -25,8 +24,6 @@ public abstract class UserDatabase extends RoomDatabase {
   public abstract UserDao userDao();
 
   public static synchronized UserDatabase getInstance(Context context) {
-
-    Log.d("inside observe - ", "inside database");
 
     if (instance == null) {
       instance = Room.databaseBuilder(context.getApplicationContext(), UserDatabase.class, "user_database").fallbackToDestructiveMigration().addCallback(roomUserCallback).build();

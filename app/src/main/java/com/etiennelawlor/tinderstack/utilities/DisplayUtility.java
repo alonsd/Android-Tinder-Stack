@@ -8,14 +8,9 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.clvb.android.network.models.response.User;
 
-/**
- * Created by etiennelawlor on 12/19/15.
- */
 public class DisplayUtility {
 
-    // region Utility Methods
     public static int dp2px(Context context, int dp) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -31,5 +26,4 @@ public class DisplayUtility {
         ((AppCompatActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
         return size.x;
     }
-    // endregion
 }

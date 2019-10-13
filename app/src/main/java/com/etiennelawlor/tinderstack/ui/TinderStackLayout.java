@@ -26,18 +26,12 @@ public class TinderStackLayout extends FrameLayout {
   }
 
   @Override
-  public void addView(View child, int index, ViewGroup.LayoutParams params) {
-    super.addView(child, index, params);
-  }
-
-  @Override
   public void onDetachedFromWindow() {
     super.onDetachedFromWindow();
   }
 
   private void init() {
     setClipChildren(false);
-
   }
 
   public void addCard(TinderCardView tinderCardView, int addToPosition) {
