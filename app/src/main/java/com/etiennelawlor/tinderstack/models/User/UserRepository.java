@@ -2,10 +2,11 @@ package com.etiennelawlor.tinderstack.models.User;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+
 import com.etiennelawlor.tinderstack.utilities.UserDatabase;
+
 import java.util.List;
 
 public class UserRepository {
@@ -36,11 +37,9 @@ public class UserRepository {
   }
 
   public LiveData<List<User>> getAllUsers() {
-    Log.d("inside observe - ", "inside repository");
     return allUsers;
   }
 
-  //TODO - migrate all 4 async tasks into one.
   private static class InsertUserAsyncTask extends AsyncTask<User, Void, Void> {
 
     private UserDao userDao;

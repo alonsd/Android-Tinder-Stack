@@ -9,9 +9,6 @@ import android.widget.FrameLayout;
 
 public class TinderStackLayout extends FrameLayout {
 
-  public static final int LIST_SIZE = 3;
-  int numberOfCardsPassed = 1;
-
   //Constructors
   public TinderStackLayout(Context context) {
     super(context);
@@ -31,10 +28,6 @@ public class TinderStackLayout extends FrameLayout {
   @Override
   public void addView(View child, int index, ViewGroup.LayoutParams params) {
     super.addView(child, index, params);
-    numberOfCardsPassed++;
-    if (numberOfCardsPassed > LIST_SIZE) {
-      numberOfCardsPassed = 1;
-    }
   }
 
   @Override
@@ -42,7 +35,6 @@ public class TinderStackLayout extends FrameLayout {
     super.onDetachedFromWindow();
   }
 
-  // Helper Methods
   private void init() {
     setClipChildren(false);
 
@@ -56,12 +48,7 @@ public class TinderStackLayout extends FrameLayout {
 
     ViewGroup.LayoutParams layoutParams;
     layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
     addView(tinderCardView, addToPosition, layoutParams);
-
-//    tinderCardView.animate()
-//        .x(0)
-//        .setInterpolator(new AnticipateOvershootInterpolator());
   }
 
   public TinderCardView getTopCardOnStack() {

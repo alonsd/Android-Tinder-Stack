@@ -1,14 +1,12 @@
 package com.etiennelawlor.tinderstack.utilities;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 //import com.clvb.android.network.models.response.User;
 
@@ -30,7 +28,7 @@ public class DisplayUtility {
 
     public static int getScreenWidth(Context context) {
         Point size = new Point();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getSize(size);
+        ((AppCompatActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
         return size.x;
     }
     // endregion

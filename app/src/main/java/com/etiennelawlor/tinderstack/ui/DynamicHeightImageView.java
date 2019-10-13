@@ -1,26 +1,16 @@
 package com.etiennelawlor.tinderstack.ui;
 
-/**
- * Created by etiennelawlor on 1/14/15.
- */
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-
+import android.view.View;
+import androidx.appcompat.widget.AppCompatImageView;
 import com.etiennelawlor.tinderstack.R;
 
-/**
- * An {@link ImageView} layout that maintains a consistent width to height aspect ratio.
- */
-public class DynamicHeightImageView extends ImageView {
+public class DynamicHeightImageView extends AppCompatImageView {
 
-    // region Member Variables
-    private double heightRatio;
-    // endregion
+    private double mHeightRatio;
 
-    // region Constructors
     public DynamicHeightImageView(Context context) {
         super(context);
         init(context, null);
@@ -35,21 +25,18 @@ public class DynamicHeightImageView extends ImageView {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
-    // endregion
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (heightRatio > 0.0) {
-            // set the image views size
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = (int) (width * heightRatio);
+        if (mHeightRatio > 0.0) {
+            int width = View.MeasureSpec.getSize(widthMeasureSpec);
+            int height = (int) (width * mHeightRatio);
             setMeasuredDimension(width, height);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
-    // region Helper Methods
     private void init(Context context, AttributeSet attrs) {
         if (!isInEditMode()) {
             TypedArray attributeArray = context.obtainStyledAttributes(
@@ -58,7 +45,7 @@ public class DynamicHeightImageView extends ImageView {
 
             try {
                 float heightRatio = attributeArray.getFloat(R.styleable.DynamicHeightImageView_heightRatio, 1.0F);
-                this.heightRatio = heightRatio;
+                this.mHeightRatio = heightRatio;
             } finally {
                 attributeArray.recycle();
             }
@@ -66,14 +53,13 @@ public class DynamicHeightImageView extends ImageView {
     }
 
     public void setHeightRatio(double ratio) {
-        if (ratio != heightRatio) {
-            heightRatio = ratio;
+        if (ratio != mHeightRatio) {
+            mHeightRatio = ratio;
             requestLayout();
         }
     }
 
     public double getHeightRatio() {
-        return heightRatio;
+        return mHeightRatio;
     }
-    // endregion
 }

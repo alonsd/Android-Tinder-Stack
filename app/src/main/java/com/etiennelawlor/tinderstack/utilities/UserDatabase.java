@@ -43,7 +43,6 @@ public abstract class UserDatabase extends RoomDatabase {
     }
   };
 
-  //TODO - delete this in the future. This is just for populating.
   private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
     static final String URL = "https://www.shortlist.com/media/images/2019/05/40-favourite-songs-of-famous-people-28-1556672663-9rFo-column-width-inline.jpg";

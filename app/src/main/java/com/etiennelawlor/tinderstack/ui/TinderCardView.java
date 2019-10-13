@@ -1,11 +1,9 @@
 package com.etiennelawlor.tinderstack.ui;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -24,29 +22,25 @@ import com.etiennelawlor.tinderstack.models.User.User;
 import com.etiennelawlor.tinderstack.utilities.DisplayUtility;
 import com.squareup.picasso.Picasso;
 
-/**
- * Created by etiennelawlor on 11/17/16.
- */
 
 public class TinderCardView extends FrameLayout implements View.OnTouchListener {
-  private static final String TAG = "TinderCardView";
+
   //Constants
   private static final float CARD_ROTATION_DEGREES = 40.0f;
   private static final float BADGE_ROTATION_DEGREES = 15.0f;
   private static final int DURATION = 700;
-  public static final int DELETE_BUTTON_PRESSED = 1;
-  public static final int PASS_BUTTON_PRESSED = 2;
-  public static final int APPROVE_BUTTON_PRESSED = 3;
+  public static final int DELETE_BUTTON_TAG = 1;
+  public static final int PASS_BUTTON_TAG = 2;
+  public static final int APPROVE_BUTTON_TAG = 3;
   public static final int ALPHA_INVISIBLE = 0;
   public static final int ALPHA_VISIBLE = 1;
   //Views
-  private ImageView imageView;
-  private TextView displayNameTextView;
-  private TextView usernameTextView;
+  private ImageView mUserPhotoImageView;
+  private TextView mDisplayNameTextView;
+  private TextView mUsernameTextView;
   private TextView mContactTextView;
   private TextView mDeleteTextView;
   private TextView mPassTextView;
-  private TinderCardView topCard;
   // Member Variables
   private float oldX;
   private float oldY;
@@ -59,8 +53,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private int screenWidth;
   private int padding;
   private boolean isCardAnimating;
-
   private User userOnCard;
+
 
   // Constructors
   public TinderCardView(Context context) {
@@ -87,7 +81,6 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
         case MotionEvent.ACTION_DOWN:
           oldX = motionEvent.getX();
           oldY = motionEvent.getY();
-          // cancel any current animations
           view.clearAnimation();
           return true;
         case MotionEvent.ACTION_UP:
@@ -110,7 +103,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
           view.setX(view.getX() + dX);
           view.setY(view.getY() + dY);
           setCardRotation(view, view.getX());
-          updateAlphaOfBadges(posX);
+          updateAlphaDuringSwipe(posX);
           return true;
         default:
           return super.onTouchEvent(motionEvent);
@@ -119,22 +112,22 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     return super.onTouchEvent(motionEvent);
   }
 
-  public void handleButtonPressed(int buttonTag) {
+  public void handleCardActions(int cardTag) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = tinderStackLayout.getTopCardOnStack();
     if (isCardAnimating || topCard == null) {
       return;
     }
-    switch (buttonTag) {
-      case DELETE_BUTTON_PRESSED:
+    switch (cardTag) {
+      case DELETE_BUTTON_TAG:
         isCardAnimating = true;
         deleteCard(topCard);
         break;
-      case PASS_BUTTON_PRESSED:
+      case PASS_BUTTON_TAG:
         isCardAnimating = true;
         passCard(topCard);
         break;
-      case APPROVE_BUTTON_PRESSED:
+      case APPROVE_BUTTON_TAG:
         showLawyerContactDetailsFragment(topCard);
         break;
     }
@@ -153,7 +146,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   private void showLawyerContactDetailsFragment(TinderCardView topCard) {
     FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
     ApproveDialogFragment fragment = new ApproveDialogFragment();
-    String lawyerName = topCard.displayNameTextView.getText().toString();
+    String lawyerName = topCard.mDisplayNameTextView.getText().toString();
     fragment.setApprovedLawyer(lawyerName);
     fragment.show(fragmentManager, "");
   }
@@ -164,13 +157,12 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     setOnTouchListener(null);
   }
 
-  // Helper Methods
   private void init(Context context, AttributeSet attrs) {
     if (!isInEditMode()) {
       inflate(context, R.layout.tinder_card, this);
-      imageView = findViewById(R.id.iv);
-      displayNameTextView = findViewById(R.id.display_name_tv);
-      usernameTextView = findViewById(R.id.username_tv);
+      mUserPhotoImageView = findViewById(R.id.iv);
+      mDisplayNameTextView = findViewById(R.id.display_name_tv);
+      mUsernameTextView = findViewById(R.id.username_tv);
       mContactTextView = findViewById(R.id.tinder_card_contact_textview);
       mDeleteTextView = findViewById(R.id.tinder_card_delete_text_view);
       mPassTextView = findViewById(R.id.tinder_card_pass_text_view);
@@ -195,12 +187,12 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   }
 
   /**
-   * This method is being called after we are above a certain boundary (left or right) and animates the card to go off screen to that side.
+   * This method is being called either after we are above a certain boundary (left or right) or when clicking the dedicated swipe buttons for pass/delete actions.
+   * Later this method animates the card to go off screen to the selected side.
    */
   private void dismissCard(final View view, int xPos, boolean shouldDeleteView) {
     view.animate()
         .x(xPos)
-        .y(0)
         .setInterpolator(new AccelerateInterpolator())
         .setDuration(DURATION)
         .setListener(new Animator.AnimatorListener() {
@@ -226,23 +218,23 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
 
   /**
    * This method handles passing or deleting the currently visible card view
-   *
-   * @param view             - the view currently being passed/deleted
+   * @param view - the view currently being passed/deleted
    * @param shouldDeleteView - determines if we should delete the view as a child or put it back inside the stack
    */
   private void handleViewAfterAnimation(View view, boolean shouldDeleteView) {
-
     isCardAnimating = false;
     TinderStackLayout tinderStackLayout = (TinderStackLayout) view.getParent();
     if (tinderStackLayout == null)
       return;
     if (shouldDeleteView) {
+      //`delete` button pressed
       if (view instanceof TinderCardView) {
-        ((MainActivity) getContext()).userViewModel.delete(((TinderCardView) view).getUserOnCard());
+        ((MainActivity) getContext()).mUserViewModel.delete(((TinderCardView) view).getUserOnCard());
         tinderStackLayout.removeView(view);
         return;
       }
     }
+    //`pass` button pressed
     tinderStackLayout.removeView(view);
     if (tinderStackLayout.getTopCardOnStack() == null) {
       ((MainActivity)getContext()).addCards();
@@ -278,32 +270,32 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   }
 
   /**
-   * Updates the alpha of the badges - "like" or "nope"
+   * Updates the alpha of the badges - "delete" or "pass"
    */
-  private void updateAlphaOfBadges(float posX) {
+  private void updateAlphaDuringSwipe(float posX) {
     float alpha = (posX - padding) / (screenWidth * 0.50f);
     mContactTextView.setAlpha(alpha);
     mDeleteTextView.setAlpha(-alpha);
   }
 
 
-  private void setUpImage(ImageView iv, User user) {
+  private void setUserImage(ImageView imageView, User user) {
     String avatarUrl = user.getAvatarUrl();
     if (!TextUtils.isEmpty(avatarUrl)) {
       Picasso.get()
           .load(avatarUrl)
-          .into(iv);
+          .into(imageView);
     }
   }
 
-  private void setUpDisplayName(TextView tv, User user) {
+  private void setUserDisplayName(TextView tv, User user) {
     String displayName = user.getDisplayName();
     if (!TextUtils.isEmpty(displayName)) {
       tv.setText(displayName);
     }
   }
 
-  private void setUpUsername(TextView tv, User user) {
+  private void setUsername(TextView tv, User user) {
     String username = user.getUsername();
     if (!TextUtils.isEmpty(username)) {
       tv.setText(username);
@@ -313,7 +305,7 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
   @Override
   public boolean equals(@Nullable Object other) {
     if (other instanceof TinderCardView) {
-      return this.usernameTextView.getText().equals(((TinderCardView) other).usernameTextView.getText());
+      return this.mUsernameTextView.getText().equals(((TinderCardView) other).mUsernameTextView.getText());
     }
     return false;
   }
@@ -329,8 +321,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     this.userOnCard = user;
     if (user == null)
       return;
-    setUpImage(imageView, user);
-    setUpDisplayName(displayNameTextView, user);
-    setUpUsername(usernameTextView, user);
+    setUserImage(mUserPhotoImageView, user);
+    setUserDisplayName(mDisplayNameTextView, user);
+    setUsername(mUsernameTextView, user);
   }
 }

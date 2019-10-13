@@ -15,10 +15,10 @@ import com.etiennelawlor.tinderstack.R;
 
 public class ApproveDialogFragment extends DialogFragment implements View.OnClickListener {
 
-  private String mSelectedLawyer;
+  private String mSelectedLawyerName;
 
   private Button mDismissButton;
-  private TextView mApprovedLawyerTextView;
+  private TextView mSelectedLawyerTextView;
 
 
   @Nullable
@@ -28,7 +28,7 @@ public class ApproveDialogFragment extends DialogFragment implements View.OnClic
     View view = inflater.inflate(R.layout.dialog_fragment_approve, container, false);
     view.setClipToOutline(true);
     mDismissButton = view.findViewById(R.id.dialog_fragment_approve_dismiss);
-    mApprovedLawyerTextView = view.findViewById(R.id.dialog_fragment_approve_lawyer_name);
+    mSelectedLawyerTextView = view.findViewById(R.id.dialog_fragment_approve_lawyer_name);
     mDismissButton.setOnClickListener(this);
 
     setLawyerName();
@@ -37,8 +37,8 @@ public class ApproveDialogFragment extends DialogFragment implements View.OnClic
   }
 
   private void setLawyerName(){
-    if (mSelectedLawyer != null) {
-      mApprovedLawyerTextView.setText(mSelectedLawyer);
+    if (mSelectedLawyerName != null) {
+      mSelectedLawyerTextView.setText(mSelectedLawyerName);
     }
   }
 
@@ -49,6 +49,7 @@ public class ApproveDialogFragment extends DialogFragment implements View.OnClic
   }
 
   public void setApprovedLawyer(String lawyerName) {
-    this.mSelectedLawyer = lawyerName;
+    this.mSelectedLawyerName = lawyerName;
   }
+
 }
