@@ -25,6 +25,8 @@ import com.squareup.picasso.Picasso;
 
 public class TinderCardView extends FrameLayout implements View.OnTouchListener {
 
+  //TODO - remove logics from this class to viewmodel
+
   //Constants
   private static final float CARD_ROTATION_DEGREES = 40.0f;
   private static final float BADGE_ROTATION_DEGREES = 15.0f;
@@ -112,6 +114,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     return super.onTouchEvent(motionEvent);
   }
 
+
+  //TODO - move all of this logic to viewmodel
   public void handleCardActions(int cardTag) {
     TinderStackLayout tinderStackLayout = ((TinderStackLayout) this.getParent());
     TinderCardView topCard = tinderStackLayout.getTopCardOnStack();
@@ -229,7 +233,8 @@ public class TinderCardView extends FrameLayout implements View.OnTouchListener 
     if (shouldDeleteView) {
       //`delete` button pressed
       if (view instanceof TinderCardView) {
-        ((MainActivity) getContext()).mUserViewModel.delete(((TinderCardView) view).getUserOnCard());
+        Context context = getContext();
+        ((MainActivity) context).mUserViewModel.delete(((TinderCardView) view).getUserOnCard());
         tinderStackLayout.removeView(view);
         return;
       }

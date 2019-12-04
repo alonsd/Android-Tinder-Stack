@@ -1,6 +1,8 @@
 package com.etiennelawlor.tinderstack.models.ViewModel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.HandlerThread;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,8 +22,19 @@ public class UserViewModel extends AndroidViewModel {
     super(application);
     repository = new UserRepository(application);
     allUsers = repository.getAllUsers();
+//    HandlerThread handlerThread = new HandlerThread("ndasd");
+//    handlerThread.run();
+//    Handler handler = new Handler(handlerThread.getLooper());
+//    handler.post(() -> {
+//      repository.delete(user);
+//    });
+//    handlerThread.quitSafely();
 
   }
+
+  //TODO - move addCards(), add all logics from CardView and StackView to here
+
+
 
   public void insert(User user) {
     repository.insert(user);

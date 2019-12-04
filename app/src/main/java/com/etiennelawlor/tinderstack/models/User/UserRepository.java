@@ -1,5 +1,6 @@
 package com.etiennelawlor.tinderstack.models.User;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.os.AsyncTask;
 
@@ -99,6 +100,9 @@ public class UserRepository {
       return null;
     }
   }
+
+
+
 
 
 }

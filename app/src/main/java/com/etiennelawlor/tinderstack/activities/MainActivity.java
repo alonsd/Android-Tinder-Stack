@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @BindView(R.id.activity_main_approve_button)
   Button mApproveButton;
 
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -69,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
   }
 
+
+  //TODO - move handle click to viewmodel
   @Override
   public void onClick(View view) {
     int buttonTag = Integer.valueOf(String.valueOf(view.getTag()));
@@ -90,4 +90,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     mApproveButton.setOnClickListener(this);
     mPassButton.setOnClickListener(this);
   }
+  
 }
